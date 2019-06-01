@@ -1,18 +1,68 @@
 package com.kc345ws.MapNavigation;
 
+import android.Manifest;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
+
+import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
     private MapView mMapView = null;
+    private BaiduMap mBaiduMap = null;
+    private LocationClient mLocationClient = null;
+    private ImageButton locationButton = null;//定位按钮
+    private LocationMyself locationMyself;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //申请权限
+        String []permission=new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
+        RequestPermission requestPermission = new RequestPermission(permission,this);
+        requestPermission.request();
+       // LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         //获取地图控件引用
-        mMapView = (MapView) findViewById(R.id.bmapView);
+        mMapView = findViewById(R.id.bmapView);
+        mBaiduMap = mMapView.getMap();//获取百度地图对象
+        mBaiduMap.setMyLocationEnabled(true);//开启定位图层
+        mLocationClient = new LocationClient(this);//定位初始化
+
+        locationButton = findViewById(R.id.locationButton);//获取定位按钮
+
+        //通过LocationClientOption设置LocationClient相关参数
+        LocationClientOption locationClientOption = new LocationClientOption();
+        locationClientOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//高精度模式
+        locationClientOption.setOpenGps(true);//打开GPS
+        locationClientOption.setCoorType("bd0911");//设置坐标类型
+        locationClientOption.setScanSpan(1000);//设置间距
+        locationClientOption.setIsNeedLocationDescribe(true);//设置需要描述位置信息
+
+        //设置locationClientOption
+        mLocationClient.setLocOption(locationClientOption);
+
+        //注册locationClientOption
+        locationMyself = new LocationMyself(mMapView,mBaiduMap,mLocationClient);
+        //MyLocationListener myLocationListener = new MyLocationListener();
+        mLocationClient.registerLocationListener(locationMyself);
+        //开启地图定位图层
+        mLocationClient.start();
+
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLocationClient.start();
+            }
+        });
+
+        SearchInfo searchInfo = new SearchInfo(locationMyself);
+        searchInfo.search();
     }
     @Override
     protected void onResume() {
@@ -31,8 +81,47 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
+        mLocationClient.stop();
+        mBaiduMap.setMyLocationEnabled(false);
+        mMapView = null;
     }
+
+    /*private void locationUpdate(Location location){//获取指定的查询信息
+        if(location!=null){//如果location不为空
+            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());//获取经纬度信息
+            Log.i("Location","纬度:"+location.getLatitude()+"经度:"+location.getLongitude());
+        }else{
+            Log.i("Location","没有获取到经纬度信息");
+        }
+    }*/
+
+    /*public class MyLocationListener extends BDAbstractLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            //mapView 销毁后不在处理新接收的位置
+            if (location == null || mMapView == null){
+                return;
+            }
+            MyLocationData myLocationData = new MyLocationData.Builder()
+                    .accuracy(location.getRadius())
+                    //此处为方向信息,顺时针0-360
+                    .direction(location.getDirection()).latitude(location.getLatitude())
+                    .longitude(location.getLongitude()).build();
+            mBaiduMap.setMyLocationData(myLocationData);
+            //MyLatLng = LatLngBounds.Builder();
+            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+            MapStatus mapStatus = new MapStatus.Builder()
+                    .target(latLng)//设置地图中心
+                    .zoom(18)//设置缩放比例
+                    .build();
+            //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+            MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mapStatus);
+            mBaiduMap.setMapStatus(mapStatusUpdate);
+        }
+    }*/
 }
+
+
 
 /*Debug调试版：
 您的密钥库包含 1 个条目
