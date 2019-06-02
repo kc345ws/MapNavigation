@@ -1,6 +1,8 @@
 package com.kc345ws.MapNavigation;
 
 import android.Manifest;
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private BaiduMap mBaiduMap = null;
     private LocationClient mLocationClient = null;
     private ImageButton locationButton = null;//定位按钮
-    private LocationMyself locationMyself;
+    private LocationMyself locationMyself = null;
+    private SearchInfo searchInfo = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +64,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SearchInfo searchInfo = new SearchInfo(locationMyself);
-        searchInfo.search();
+        searchInfo = new SearchInfo(this,locationMyself,mBaiduMap);
+        /*ImageButton chaxunButton = findViewById(R.id.chacunButton);
+        chaxunButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchInfo.search();
+            }
+        });*/
+
+        //SearchInfo searchInfo = new SearchInfo(this,locationMyself,mBaiduMap);
+        //searchInfo.search();
+
+        ImageButton findnearbyBTN = findViewById(R.id.findnearbyBTN);
+        findnearbyBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SelectPoiActivity.class);
+                startActivityForResult(intent,0X141);//发现周边Activity
+            }
+        });
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 0X141 && resultCode == 0X141){
+            Bundle bundle = data.getExtras();//获取SelectPoiActivity的Extras
+            String selectpoi = bundle.getString("selectPOI");//获取选择POI
+            searchInfo.search(selectpoi);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -120,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
 }
+
+
 
 
 

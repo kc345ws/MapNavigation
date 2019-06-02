@@ -34,13 +34,16 @@ public class LocationMyself extends BDAbstractLocationListener {
                 //此处为方向信息,顺时针0-360
                 .direction(location.getDirection()).latitude(location.getLatitude())
                 .longitude(location.getLongitude()).build();
+
         mBaiduMap.setMyLocationData(myLocationData);
         //MyLatLng = LatLngBounds.Builder();
         latLng = new LatLng(location.getLatitude(),location.getLongitude());
+
         MapStatus mapStatus = new MapStatus.Builder()
                     .target(latLng)//设置地图中心
                     .zoom(18)//设置缩放比例
                     .build();
+
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
         MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mapStatus);
         mBaiduMap.setMapStatus(mapStatusUpdate);//将地图状态设置为新的状态

@@ -12,6 +12,9 @@
         android:layout_height="match_parent"
         android:clickable="true" />
 
+
+
+
     <ImageButton
         android:id="@+id/locationButton"
         android:layout_width="wrap_content"
@@ -25,25 +28,92 @@
         app:layout_constraintRight_toRightOf="parent"
          />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="8dp"
+        android:text="定位自身"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/locationButton" />
+
+    <ImageButton
+        android:id="@+id/findnearbyBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#00000000"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/locationButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/iconfontzhengzaidingwei" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="#00000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/locationButton"
+        app:srcCompat="@drawable/techreport" />
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
+
         <ImageButton
+            android:id="@+id/chacunButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@mipmap/chaxun"
-            />
+            android:background="#FFFFFF"
+            android:src="@mipmap/chaxun" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:layout_constraintTop_toTopOf="parent"
             android:background="#FFFFFF"
             android:hint="   搜索附近地点..."
-            />
+            android:inputType="text"
+            android:singleLine="true"
+            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/findnearbyTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="发现周边"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bmapView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="导航"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
 
 </android.support.constraint.ConstraintLayout>

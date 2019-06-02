@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':BaiDuMapSampleDemo'
+project(':BaiDuMapSampleDemo').projectDir = new File('BaiDuMapDemo')
